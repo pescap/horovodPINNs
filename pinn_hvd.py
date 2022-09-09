@@ -10,9 +10,10 @@ import matplotlib.pyplot as plt
 np.random.seed(1234)
 tf.set_random_seed(1234)
 
-#method = 'full'
-method = 'parallel'
+method = 'full'
+#method = 'parallel'
 
+ndom = 8
 
 def hyper_initial(size):
     in_dim = size[0]
@@ -32,7 +33,7 @@ def pdenn(X, W, b):
     u = DNN(X, W, b)
     u_x = tf.gradients(u, X)[0]
     u_xx = tf.gradients(u_x, X)[0]
-    f = 4*tf.sin(2*np.pi*X)*np.pi*np.pi
+    f = tf.sin(np.pi*X)*np.pi*np.pi
 
     R = u_xx + f
 
@@ -40,7 +41,8 @@ def pdenn(X, W, b):
 
 def data(N, method):
     if method == 'full':
-        x_col = np.linspace(-1, hvd.size()-1, N * hvd.size()).reshape((-1, 1))
+        #x_col = np.linspace(-1, hvd.size()-1, N * hvd.size()).reshape((-1, 1))
+        x_col = np.linspace(-1, hvd.size()-1, N * ndom).reshape((-1, 1))
     if method == 'parallel':
         x_col = np.linspace(hvd.rank()-1, hvd.rank(), N).reshape((-1, 1))
     if method == 'ml':
@@ -66,8 +68,8 @@ x_col = data(N, method)
 #x_col = np.linspace(-1, hvd.size(), N).reshape((-1, 1))
 x_0 = np.array([-1]).reshape((-1, 1))
 x_1 = np.array([1]).reshape((-1, 1))
-y_0 = np.sin(2*np.pi*x_0)
-y_1 = np.sin(2*np.pi*x_1)
+y_0 = np.sin(np.pi*x_0)
+y_1 = np.sin(np.pi*x_1)
 
 layers = [1] + 3*[150] + [1]
 L = len(layers)
@@ -83,8 +85,8 @@ y_0_nn = DNN(x_0_train, W, b)
 y_1_nn = DNN(x_1_train, W, b) 
 R_nn = pdenn(x_train, W, b)
 
-loss = tf.reduce_mean(tf.square(R_nn)) + \
-       tf.reduce_mean(tf.square(y_0_nn - y_0_train)) + \
+loss = tf.reduce_mean(tf.square(R_nn)) + 10 * \
+       tf.reduce_mean(tf.square(y_0_nn - y_0_train)) + 10 * \
        tf.reduce_mean(tf.square(y_1_nn - y_1_train)) 
 
 #lr = 0.001 *hvd.size()
@@ -120,10 +122,12 @@ if hvd.rank() == 0:
     print('Rank: %d, Elapsed time: %f s'%(hvd.rank(), stop_time - start_time))
 
     N_plot = 450
-    xplot = np.linspace(-1, hvd.size()-1, N_plot).reshape((-1, 1)) 
-    y_exact = np.sin(2*np.pi*xplot)
+    xplot = np.linspace(-1, 7, N_plot).reshape((-1, 1)) 
+    y_exact = np.sin(np.pi*xplot)
 
     y_pred_ = sess.run(y_nn, feed_dict={x_train: xplot})
+    
+    print(np.linalg.norm((y_pred_ - y_exact) / np.linalg.norm(y_exact)), 'L2-norm')
 
     filename = 'pinn_p' + str(N) + str(hvd.size())+ str(Nmax)
     np.savetxt('results/y_pred_' + filename, y_pred_, fmt='%e')
