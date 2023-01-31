@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import os
 import argparse
 import time
+import datetime
 
 now = datetime.datetime.now()
 parser = argparse.ArgumentParser(description="Set parameters")
@@ -56,8 +57,6 @@ lr = args.lr
 
 hvd.init()
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = str(hvd.local_rank())
-
 seed_rank = seed + 1000 * hvd.local_rank()
 
 np.random.seed(seed_rank)
@@ -70,13 +69,23 @@ config.gpu_options.allow_growth = True
 sess = tf.Session(config=config)
 
 
-name = "results/" + "seed" + str(seed) + "_N" + str(N) + "_epochs" + str(epochs) + "_size" + str(hvd.size())
+name = (
+    "results/"
+    + "seed"
+    + str(seed)
+    + "_N"
+    + str(N)
+    + "_epochs"
+    + str(epochs)
+    + "_size"
+    + str(hvd.size())
+)
 if args.use_adasum:
-    name = name + '_adasum'
+    name = name + "_adasum"
 
 if args.fp16_allreduce:
-    name = name + '_fp16'
-    
+    name = name + "_fp16"
+
 
 def hyper_initial(size):
     in_dim = size[0]
@@ -221,10 +230,10 @@ if hvd.rank() == 0:
 
     pointsec_mean = np.mean(pointsec_list[3:])
     pointsec_conf = 1.96 * np.std(pointsec_list[3:])
-    
+
     time_mean = np.mean(time_list[3:])
     time_conf = 1.96 * np.std(time_list[3:])
-    
+
     min_index = np.array(test_list).argmin()
     err_l2 = np.array(metrics_list)[min_index]
 
@@ -232,13 +241,13 @@ if hvd.rank() == 0:
     print(err_l2, "L2-norm")
     print(texec, "texec")
     print(theta, "# Parameters:")
-    
-    print('Time for 500 epochs:= ', time_mean, '+-', time_conf)
-    print('Pointsec for 500 epochs:= ', pointsec_mean, '+-', pointsec_conf)
+
+    print("Time for 500 epochs:= ", time_mean, "+-", time_conf)
+    print("Pointsec for 500 epochs:= ", pointsec_mean, "+-", pointsec_conf)
 
     niter = time_list.shape[0]
-    
-    my_dict = {       
+
+    my_dict = {
         "texec": texec,
         "theta": theta,
         "err": err_l2,
@@ -247,7 +256,7 @@ if hvd.rank() == 0:
         "metrics": metrics_list,
         "times": time_list,
         "pointsec": pointsec_list,
-        "date": now
+        "date": now,
     }
     if args.save:
         np.save(name + ".npy", my_dict)
