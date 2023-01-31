@@ -1,22 +1,18 @@
 # HorovodPINNs
 
-Data-based parallel Physics-informed neural networks via Horovod. Its code comes with the preprint entitled:
+Data-based parallel acceleration for physics-informed neural networks (PINNs) via Horovod. Its code comes with the preprint entitled:
 
 $h$-analysis and data-parallel physics-informed neural networks, P. Escapil-Inchauspé and G. A. Ruz.
 
 We apply data-based Horovod acceleration to pioneer [PINNs](https://github.com/maziarraissi/PINNs/) code by Raissi, Perdikaris and Karniadakis. Horovod acceleration is inspired by Xihui Meng [Distributed-training-Horovod](https://github.com/XuhuiM/Distributed-training-Horovod) code.
 
-The aim of this repository is two-fold:
-
-1. To fully replicate and reproduce the results in the manuscript, including the figures generation; 
-2. To understand better how to apply Horovod based data-parallel acceleration to PINNs or physics-informed machine learning schemes.
-
+This repository is intended to help users understand how to apply Horovod based data-parallel acceleration to PINNs or physics-informed machine learning schemes. It is also meant to enable users to fully replicate and reproduce the results in our manuscript, including the figures generation.       
 
 Backend: `tensorflow.compat.v1`.
 
 ## Content
 
-This repository is with the following folders:
+This repository contains the following folders:
 - [PINNs](https://github.com/maziarraissi/PINNs/) submodule;
 - [Distributed-training-Horovod](https://github.com/XuhuiM/Distributed-training-Horovod) submodule;
 - Laplace: An improved version of [pinn_hvd_data.py](https://github.com/XuhuiM/Distributed-training-Horovod/blob/master/pinn_hvd_data.py);
