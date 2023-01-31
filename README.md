@@ -1,4 +1,4 @@
-# horovodPINNs
+# HorovodPINNs
 
 Data-based parallel Physics-informed neural networks via Horovod. Its code comes with the preprint entitled:
 
