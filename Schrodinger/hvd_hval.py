@@ -411,7 +411,7 @@ N_f = N
 
 layers = [2, 100, 100, 100, 100, 2]
 
-data = scipy.io.loadmat("../Data/NLS.mat")
+data = scipy.io.loadmat("../PINNs/main/Data/NLS.mat")
 
 t = data["tt"].flatten()[:, None]
 x = data["x"].flatten()[:, None]

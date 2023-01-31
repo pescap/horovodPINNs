@@ -397,7 +397,7 @@ print(epochs, "epochs")
 layers = [3, 20, 20, 20, 20, 20, 20, 20, 20, 2]
 
 # Load Data
-data = scipy.io.loadmat("../Data/cylinder_nektar_wake.mat")
+data = scipy.io.loadmat("../PINNs/main/Data/cylinder_nektar_wake.mat")
 
 U_star = data["U_star"]  # N x 2 x T
 P_star = data["p_star"]  # N x T
