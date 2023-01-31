@@ -1,0 +1,6 @@
+[submodule "PINNs"]
+	path = PINNs
+	url = https://github.com/maziarraissi/PINNs.git
+[submodule "Distributed-training-Horovod"]
+	path = Distributed-training-Horovod
+	url = https://github.com/XuhuiM/Distributed-training-Horovod.git
