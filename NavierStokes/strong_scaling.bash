@@ -1,4 +1,4 @@
-epochs=20000;
+epochs=30000;
 lr=1e-4;
 logfile=out.log
 

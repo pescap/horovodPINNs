@@ -1,4 +1,4 @@
-epochs=20000;
+epochs=30000;
 lr=1e-4;
 logfile=out.log
 
@@ -29,7 +29,7 @@ np=4;
 # 4 GPUs
 CUDA_VISIBLE_DEVICES=0,1,2,3 horovodrun -np ${np} -H localhost:${np} python hvd_hval.py --N 1000 --lr ${lr} --seed 1234 --epochs ${epochs} --save 2> /dev/null&
 echo "$np"-1234> "$logfile";
-CUDA_VISIBLE_DEVICES=4,5,6,7  horovodrun -np ${np} -H localhost:${np} python hvd_hval.py --N 100 --lr ${lr} --seed 1235 --epochs ${epochs} --save 2> /dev/null&
+CUDA_VISIBLE_DEVICES=4,5,6,7  horovodrun -np ${np} -H localhost:${np} python hvd_hval.py --N 1000 --lr ${lr} --seed 1235 --epochs ${epochs} --save 2> /dev/null&
 echo "$np"-1235> "$logfile";
 wait;
 
