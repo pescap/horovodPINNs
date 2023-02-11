@@ -65,7 +65,7 @@ parser.add_argument(
 args = parser.parse_args()
 epochs = args.epochs
 seed = args.seed
-N = args.N
+N_train = args.N
 
 hvd.init()
 
@@ -74,7 +74,7 @@ name = (
     + "seed"
     + str(seed)
     + "_N"
-    + str(N)
+    + str(N_train)
     + "_epochs"
     + str(epochs)
     + "_size"
@@ -295,7 +295,7 @@ class PhysicsInformedNN:
             if it % 500 == 0 and hvd.rank() == 0:
 
                 elapsed = time.time() - start_time
-                pointsec = N * 500 / elapsed  # * hvd.size()
+                pointsec = N_train * 500 / elapsed  # * hvd.size()
                 loss_value = self.sess.run(self.loss, tf_dict)
                 loss_value_test = self.sess.run(self.loss, tf_test_dict)
 
@@ -391,7 +391,7 @@ def axisEqual3D(ax):
         getattr(ax, "set_{}lim".format(dim))(ctr - r, ctr + r)
 
 
-print(N, "N")
+print(N_train, "N")
 print(epochs, "epochs")
 
 layers = [3, 20, 20, 20, 20, 20, 20, 20, 20, 2]
@@ -428,7 +428,7 @@ p = PP.flatten()[:, None]  # NT x 1
 ######################## Noiseles Data ###############################
 ######################################################################
 # Training Data
-idx = np.random.choice(N * T, N, replace=False)
+idx = np.random.choice(N * T, N_train, replace=False)
 x_train = x[idx, :]
 y_train = y[idx, :]
 t_train = t[idx, :]
@@ -436,7 +436,7 @@ u_train = u[idx, :]
 v_train = v[idx, :]
 
 # Testing Data
-idx_test = np.random.choice(N * T, N, replace=False)
+idx_test = np.random.choice(N * T, N_train, replace=False)
 x_test = x[idx_test, :]
 y_test = y[idx_test, :]
 t_test = t[idx_test, :]
@@ -471,7 +471,7 @@ if hvd.rank() == 0:
 
     print("Training time: %.4f" % (elapsed))
     print(theta, "# Parameters:")
-    print(N, "N")
+    print(N_train, "N")
 
     train_list = np.array(model.train_list)
     test_list = np.array(model.test_list)

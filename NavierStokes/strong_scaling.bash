@@ -2,8 +2,6 @@ epochs=30000;
 lr=1e-4;
 logfile=out.log
 
-# Perform the weak scaling
-
 np=2;
 # 2 GPUs
 CUDA_VISIBLE_DEVICES=0,1 horovodrun -np ${np} -H localhost:${np} python hvd_hval.py --N 2000 --lr ${lr} --seed 1234 --epochs ${epochs} --save 2> /dev/null&
