@@ -29,8 +29,9 @@ git clone https://github.com/pescap/horovodPINNs.git --recurse-submodules
 
 ## Run the experiments
 
-To run the experiments, an Docker image with `horovod==0.26.1` can be downloaded and run throughout command:
+To run the experiments, a Docker image with `horovod==0.26.1` can be downloaded and run throughout command:
 
 ```
 nvidia-docker run -p 8888:8888 pescap/dist-training-horovod-master
 ```
+
