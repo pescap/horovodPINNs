@@ -283,8 +283,8 @@ class PhysicsInformedNN:
             self.x_tf: self.x_test,
             self.y_tf: self.y_test,
             self.t_tf: self.t_test,
-            self.u_tf: self.u,
-            self.v_tf: self.v,
+            self.u_tf: self.u_test,
+            self.v_tf: self.v_test,
         }
 
         start_time = time.time()

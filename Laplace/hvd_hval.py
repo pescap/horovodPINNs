@@ -197,7 +197,7 @@ pointsec_list = []
 ta = time.perf_counter()
 while n <= epochs:
     y_pred, train_, loss_ = sess.run([y_nn, train, loss], feed_dict=train_dict)
-    y_test, test_, loss_test = sess.run([y_nn, train, loss], feed_dict=test_dict)
+    y_test, loss_test = sess.run([y_nn, loss], feed_dict=test_dict)
     err_l2 = np.linalg.norm((y_test - y_exact) / np.linalg.norm(y_exact))
 
     if n % 500 == 0 and hvd.rank() == 0:
